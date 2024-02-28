@@ -1,0 +1,23 @@
+{
+  "name": "multi-timer",
+  "version": "1.0.0",
+  "dependencies": {
+    "@shopify/draggable": "^1.1.3",
+    "vue": "^3.4.0"
+  },
+  "devDependencies": {
+    "@farmfe/cli": "^0.6.1",
+    "@farmfe/core": "^0.16.5",
+    "@vitejs/plugin-vue": "^4.5.0",
+    "core-js": "^3.30.1",
+    "vite": "5.1.4"
+  },
+  "scripts": {
+    "dev": "farm start",
+    "start": "farm start",
+    "build": "farm build",
+    "preview": "farm preview",
+    "clean": "farm clean",
+    "postinstall": "npx --yes peer-gear --install"
+  }
+}

@@ -1,22 +1,31 @@
+import { Sortable } from "@shopify/draggable";
+import './style.css'
+
 document.addEventListener("DOMContentLoaded", () => {
-  const timerList = document.getElementById("timerList");
-  const addTimerBtn = document.getElementById("addTimerBtn");
-  const defaultTimeInput = document.getElementById("defaultTime");
-  const notifyCheckbox = document.getElementById("notifyCheckbox");
-  addTimerBtn.style.color = "green"; // Optional: Set the color to green
+  const timerList = document.getElementById("timerList") as HTMLDivElement;
+  const addTimerBtn = document.getElementById("addTimerBtn") as HTMLButtonElement;
+  const defaultTimeInput = document.getElementById("defaultTime") as HTMLInputElement;
+  const notifyCheckbox: HTMLInputElement = document.getElementById("notifyCheckbox") as HTMLInputElement;
 
   notifyCheckbox.addEventListener("change", function () {
-    if (this.checked) {
+    if (this.checked)  {
       requestNotificationPermission();
     }
   });
 
   addTimerBtn.addEventListener("click", addTimer);
 
-  function createTimerComponent(defaultTime) {
+  // Initialize Draggable for the timer list after timers are added
+  const sortable = new Sortable(timerList, {
+    draggable: ".timer", // assuming each timer is a direct child div of timerList
+    handle: ".timer-handle",
+  });
+
+  function createTimerComponent(defaultTime: string) {
     const timerComponent = document.createElement("div");
     timerComponent.className = "timer";
     timerComponent.innerHTML = `
+      <div class="timer-handle"></div>
       <input type="text" placeholder="Timer Title" class="timer-title"/>
       <input type="text" value="${defaultTime}" class="timer-value"/>
       <div class="btn-container flex-row">
@@ -37,22 +46,22 @@ document.addEventListener("DOMContentLoaded", () => {
     setupTimerControls(timerComponent, defaultTime);
   }
 
-  function setupTimerControls(timerComponent, initialTime) {
-    const timerTitle = timerComponent.querySelector(".timer-title");
-    const timerValue = timerComponent.querySelector(".timer-value");
-    const startPauseBtn = timerComponent.querySelector(".start-pause-btn");
-    const resetInitialBtn = timerComponent.querySelector(".reset-initial-btn");
-    const resetDefaultBtn = timerComponent.querySelector(".reset-default-btn");
-    const removeBtn = timerComponent.querySelector(".remove-btn");
-    let intervalId = null;
+  function setupTimerControls(timerComponent: HTMLDivElement, initialTime: string) {
+    const timerTitle = timerComponent.querySelector(".timer-title") as HTMLInputElement;
+    const timerValue = timerComponent.querySelector(".timer-value") as HTMLInputElement;
+    const startPauseBtn = timerComponent.querySelector(".start-pause-btn") as HTMLButtonElement;
+    const resetInitialBtn = timerComponent.querySelector(".reset-initial-btn") as HTMLButtonElement;
+    const resetDefaultBtn = timerComponent.querySelector(".reset-default-btn") as HTMLButtonElement;
+    const removeBtn = timerComponent.querySelector(".remove-btn") as HTMLButtonElement;
+    let intervalId: number | undefined;
     let wasRunning = false;
 
-    function toggleTimer(shouldStart) {
+    function toggleTimer(shouldStart: boolean) {
       if (shouldStart) {
         startTimer();
       } else {
         clearInterval(intervalId);
-        intervalId = null;
+        intervalId = undefined;
         startPauseBtn.textContent = "▶️";
         timerComponent.style.backgroundColor = ""; // Reset background color to default
       }
@@ -60,15 +69,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function startTimer() {
       // Clear background color when timer starts
-      timerComponent.style.backgroundColor = "#c5eba9"; // Turn bg color to light green
+      timerComponent.style.backgroundColor = "rgb(182, 243, 137)"; // Turn bg color to light green
 
-      let [minutes, seconds] = timerValue.value.split(":").map(num => parseInt(num, 10));
+      let [minutes, seconds] = timerValue.value.split(":").map((num: string) => parseInt(num, 10));
       let totalSeconds = minutes * 60 + seconds;
 
       intervalId = setInterval(() => {
         if (totalSeconds <= 0) {
           clearInterval(intervalId);
-          intervalId = null;
+          intervalId = undefined;
           timerComponent.style.backgroundColor = "orange";
           onComplete();
           startPauseBtn.textContent = "▶️";
@@ -85,7 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     timerValue.addEventListener("focus", () => {
-      if (intervalId !== null) {
+      if (intervalId !== undefined) {
         wasRunning = true;
         toggleTimer(false);
       }
@@ -99,7 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     startPauseBtn.addEventListener("click", () => {
-      if (intervalId === null) {
+      if (intervalId === undefined) {
         toggleTimer(true);
       } else {
         toggleTimer(false);
@@ -108,7 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     resetDefaultBtn.addEventListener("click", () => {
       clearInterval(intervalId);
-      intervalId = null;
+      intervalId = undefined;
       timerValue.value = defaultTimeInput.value; // Reset to the current default time
       timerComponent.style.backgroundColor = ""; // Remove background color
       startPauseBtn.textContent = "▶️";
@@ -116,7 +125,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     resetInitialBtn.addEventListener("click", () => {
       clearInterval(intervalId);
-      intervalId = null;
+      intervalId = undefined;
       timerValue.value = initialTime; // Reset to the initial time
       timerComponent.style.backgroundColor = ""; // Remove background color
       startPauseBtn.textContent = "▶️";
@@ -137,7 +146,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // Check if system notifications are enabled and send a notification
       if (notifyCheckbox.checked) {
         sendSystemNotification(`${timerTitle.value || "Timer"} Completed`, {
-          body: `Your ${timerTitle.value ? timerTitle.value + " " : "" }timer has finished.`,
+          body: `Your ${timerTitle.value ? timerTitle.value + " " : ""}timer has finished.`,
         });
       }
     }
@@ -153,7 +162,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function sendSystemNotification(title, options) {
+  function sendSystemNotification(title: string, options: NotificationOptions) {
     if ("Notification" in window && Notification.permission === "granted") {
       new Notification(title, options);
     } else if (Notification.permission === "denied") {
