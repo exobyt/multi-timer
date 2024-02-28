@@ -1,6 +1,20 @@
 import { Sortable } from "@shopify/draggable";
 import './style.css'
 
+var draggableInitialized = false;
+
+function setupDraggable() {
+  if (draggableInitialized) {
+    return;
+  }
+  // Initialize Draggable for the timer list after timers are added
+  const sortable = new Sortable(document.getElementById("timerList") as HTMLDivElement, {
+    draggable: ".timer", // assuming each timer is a direct child div of timerList
+    handle: ".timer-handle",
+  });
+  draggableInitialized = true;
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const timerList = document.getElementById("timerList") as HTMLDivElement;
   const addTimerBtn = document.getElementById("addTimerBtn") as HTMLButtonElement;
@@ -15,11 +29,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   addTimerBtn.addEventListener("click", addTimer);
 
-  // Initialize Draggable for the timer list after timers are added
-  const sortable = new Sortable(timerList, {
-    draggable: ".timer", // assuming each timer is a direct child div of timerList
-    handle: ".timer-handle",
-  });
 
   function createTimerComponent(defaultTime: string) {
     const timerComponent = document.createElement("div");
@@ -44,6 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const defaultTime = defaultTimeInput.value;
     const timerComponent = createTimerComponent(defaultTime);
     setupTimerControls(timerComponent, defaultTime);
+    setupDraggable();
   }
 
   function setupTimerControls(timerComponent: HTMLDivElement, initialTime: string) {
