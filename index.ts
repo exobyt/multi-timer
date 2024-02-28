@@ -1,7 +1,7 @@
 import { Sortable } from "@shopify/draggable";
 import './style.css'
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("load", () => {
   const timerList = document.getElementById("timerList") as HTMLDivElement;
   const addTimerBtn = document.getElementById("addTimerBtn") as HTMLButtonElement;
   const defaultTimeInput = document.getElementById("defaultTime") as HTMLInputElement;
