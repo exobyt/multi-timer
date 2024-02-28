@@ -15,7 +15,7 @@
   "scripts": {
     "dev": "farm start",
     "start": "farm start",
-    "build": "farm build --base '/multi-timer/'",
+    "build": "farm build",
     "preview": "farm preview",
     "clean": "farm clean",
     "postinstall": "npx --yes peer-gear --install"
