@@ -1,4 +1,4 @@
-import { Sortable } from "@shopify/draggable";
+import { Sortable, Plugins } from "@shopify/draggable";
 import './style.css'
 
 var draggableInitialized = false;
@@ -8,10 +8,10 @@ function setupDraggable() {
     return;
   }
   // Initialize Draggable for the timer list after timers are added
-  let shit = document.getElementById("timerList") as HTMLDivElement;
-  const sortable = new Sortable(shit, {
-    // draggable: ".timer", // assuming each timer is a direct child div of timerList
+  const sortable = new Sortable(document.getElementById("timerList") as HTMLDivElement, {
+    draggable: ".timer", // assuming each timer is a direct child div of timerList
     handle: ".timer-handle",
+    plugins: [Plugins.Snappable],
   });
   draggableInitialized = true;
 }
