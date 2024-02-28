@@ -57,6 +57,7 @@ input {
 /* Styles for the timer handle */
 .timer-handle {
   position: relative;
+  user-select: none;
   width: 16px;
   cursor: move;
 }
