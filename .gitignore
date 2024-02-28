@@ -5,4 +5,4 @@
 
 # Dist
 node_modules
-dist/
+#gdist/
