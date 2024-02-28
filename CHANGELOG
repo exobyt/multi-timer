@@ -1,8 +1,0 @@
-TODO:
-- Fix timer lag by installing higher res async timer
-
-2024-02-28
-- Added dragging and dropping
-- Improved running timer color
-- Made text boxes wider
-- Converted to yarn with farm build step and typescript
