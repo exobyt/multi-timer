@@ -11,7 +11,7 @@ function setupDraggable() {
   const sortable = new Sortable(document.getElementById("timerList") as HTMLDivElement, {
     draggable: ".timer", // assuming each timer is a direct child div of timerList
     handle: ".timer-handle",
-    plugins: [Plugins.Snappable],
+    // plugins: [Plugins.Snappable],
   });
   draggableInitialized = true;
 }
